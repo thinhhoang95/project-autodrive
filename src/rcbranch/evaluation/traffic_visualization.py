@@ -392,6 +392,45 @@ def trajectories_from_mpc_solution(solution, vehicles: Iterable[object], *, dt: 
     return trajectories
 
 
+def constant_accel_trajectories_from_vehicles(
+    vehicles: Iterable[object],
+    *,
+    dt: float = 0.1,
+    duration: float = 10.0,
+) -> list[VehicleTrajectory]:
+    """Build visualization trajectories from vehicle initial states and observed acceleration."""
+
+    if dt <= 0.0:
+        raise ValueError("dt must be positive.")
+    if duration <= 0.0:
+        raise ValueError("duration must be positive.")
+
+    times = np.arange(0.0, duration + 0.5 * dt, dt)
+    trajectories: list[VehicleTrajectory] = []
+    for vehicle in vehicles:
+        ref_path = getattr(vehicle, "ref_path")
+        s0 = float(getattr(vehicle, "s0", 0.0))
+        v0 = float(getattr(vehicle, "v0", 0.0))
+        a_obs = float(getattr(vehicle, "a_obs", 0.0))
+        s_values = np.clip(s0 + v0 * times + 0.5 * a_obs * times**2, 0.0, ref_path.length)
+        v_values = np.maximum(v0 + a_obs * times, 0.0)
+        obstacle_id = int(getattr(vehicle, "obstacle_id"))
+        label = "ego" if getattr(vehicle, "is_ego", False) else f"vehicle {obstacle_id}"
+        trajectories.append(
+            VehicleTrajectory(
+                obstacle_id=obstacle_id,
+                ref_path=ref_path,
+                s=s_values,
+                times=times,
+                v=v_values,
+                label=label,
+                length=float(getattr(vehicle, "length", 4.5)),
+                width=float(getattr(vehicle, "width", 2.0)),
+            )
+        )
+    return trajectories
+
+
 def visualize_traffic_scene(
     trajectories: Iterable[VehicleTrajectory],
     *,

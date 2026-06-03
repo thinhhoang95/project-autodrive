@@ -10,6 +10,7 @@ from rcbranch.evaluation.traffic_visualization import (
     visualize_traffic_scene,
 )
 from rcbranch.geometry import ReferencePath
+from rcbranch.scripts.visualization_cli import add_visualization_arguments, save_requested_frame
 
 
 def build_demo_trajectories(dt: float = 0.1, duration: float = 10.0) -> list[VehicleTrajectory]:
@@ -44,14 +45,7 @@ def build_demo_trajectories(dt: float = 0.1, duration: float = 10.0) -> list[Veh
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Launch a matplotlib traffic-intersection visualization demo.")
-    parser.add_argument("--dt", type=float, default=0.1, help="Demo sampling period in seconds.")
-    parser.add_argument("--duration", type=float, default=10.0, help="Demo duration in seconds.")
-    parser.add_argument("--tail-seconds", type=float, default=2.0, help="History tail length in seconds.")
-    parser.add_argument("--loop", action="store_true", help="Loop playback when it reaches the end.")
-    parser.add_argument("--no-show", action="store_true", help="Build the figure without opening a GUI window.")
-    parser.add_argument("--save-frame", help="Optional path to save a static frame.")
-    parser.add_argument("--frame-time", type=float, default=4.5, help="Frame time for --save-frame.")
-    return parser
+    return add_visualization_arguments(parser)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -66,9 +60,7 @@ def main(argv: list[str] | None = None) -> int:
         tail_seconds=args.tail_seconds,
         loop=args.loop,
     )
-    if args.save_frame:
-        visualizer.save_frame(args.save_frame, t=args.frame_time)
-        print(args.save_frame)
+    save_requested_frame(visualizer, args)
     return 0
 
 

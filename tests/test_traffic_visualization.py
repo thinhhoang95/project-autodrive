@@ -9,10 +9,12 @@ import pytest
 from rcbranch.evaluation.traffic_visualization import (
     TrafficVisualizer,
     VehicleTrajectory,
+    constant_accel_trajectories_from_vehicles,
     conflict_graph_from_trajectories,
     vehicle_footprint,
 )
 from rcbranch.geometry import ReferencePath
+from rcbranch.scenarios import build_turning_crossroad_scene
 
 
 def test_vehicle_footprint_is_centered_and_oriented():
@@ -57,3 +59,15 @@ def test_conflict_graph_from_trajectories_builds_intersection_conflict():
 
     assert len(conflicts) == 1
     assert {conflicts[0].i, conflicts[0].j} == {1, 2}
+
+
+def test_constant_accel_trajectories_from_turning_scene():
+    vehicles = build_turning_crossroad_scene()
+
+    trajectories = constant_accel_trajectories_from_vehicles(vehicles, dt=0.5, duration=2.0)
+
+    assert [trajectory.obstacle_id for trajectory in trajectories] == [1, 2]
+    assert trajectories[0].label == "ego"
+    assert trajectories[0].times.tolist() == pytest.approx([0.0, 0.5, 1.0, 1.5, 2.0])
+    assert trajectories[0].s.tolist() == pytest.approx([2.0, 4.5, 7.0, 9.5, 12.0])
+    assert np.all(trajectories[0].s <= vehicles[0].ref_path.length)

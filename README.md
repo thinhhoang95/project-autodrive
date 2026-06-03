@@ -59,3 +59,15 @@ To save a static frame without opening a GUI:
 ```bash
 uv run --python /opt/homebrew/bin/python3.11 rcbranch-demo-traffic --no-show --save-frame traffic_demo.png
 ```
+
+Visualize the synthetic 90-degree turning crossroad scenario:
+
+```bash
+uv run --python /opt/homebrew/bin/python3.11 rcbranch-turning-traffic
+```
+
+To save a static frame of the turning scenario:
+
+```bash
+uv run --python /opt/homebrew/bin/python3.11 rcbranch-turning-traffic --no-show --save-frame turning_crossroad_demo.png
+```

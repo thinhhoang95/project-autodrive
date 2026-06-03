@@ -32,6 +32,7 @@ dev = [
 rcbranch-run-one = "rcbranch.scripts.run_one_scenario:main"
 rcbranch-run-benchmark = "rcbranch.scripts.run_benchmark:main"
 rcbranch-demo-traffic = "rcbranch.scripts.demo_traffic_visualization:main"
+rcbranch-turning-traffic = "rcbranch.scripts.visualize_turning_crossroad:main"
 
 [build-system]
 requires = ["hatchling"]
