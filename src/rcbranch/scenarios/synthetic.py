@@ -53,7 +53,7 @@ def build_turning_crossroad_scene() -> list[VehicleOnPath]:
         route_id="west_to_north_turn",
         incoming_id="west",
         ref_path=ego_path,
-        s0=2.0,
+        s0=12.0,
         v0=5.0,
         a_obs=0.0,
         length=4.5,

@@ -40,6 +40,10 @@ def _vehicles_by_id(vehicles: list[VehicleOnPath]) -> dict[int, VehicleOnPath]:
     return {vehicle.obstacle_id: vehicle for vehicle in vehicles}
 
 
+def _solver_succeeded(status: str) -> bool:
+    return status in {"Solve_Succeeded", "Solved_To_Acceptable_Level"}
+
+
 def update_pair_beliefs(
     active: list[VehicleOnPath],
     conflicts: list[ConflictRegion],
@@ -111,6 +115,9 @@ def run_mpc_cycle(
             delta_safe_time=float(branching_cfg.get("delta_safe_time", 0.7)),
         )
     except ValueError:
+        memory.update(selected_sol=rc_sol, beliefs=beliefs, scores=scores, planner_mode="branch_fallback_rc")
+        return float(rc_sol.ego_accel[0]), rc_sol
+    if not _solver_succeeded(branch_sol.status):
         memory.update(selected_sol=rc_sol, beliefs=beliefs, scores=scores, planner_mode="branch_fallback_rc")
         return float(rc_sol.ego_accel[0]), rc_sol
     memory.update(selected_sol=branch_sol, beliefs=beliefs, scores=scores, planner_mode="branch_mpc")

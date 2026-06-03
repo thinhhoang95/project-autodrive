@@ -69,5 +69,5 @@ def test_constant_accel_trajectories_from_turning_scene():
     assert [trajectory.obstacle_id for trajectory in trajectories] == [1, 2]
     assert trajectories[0].label == "ego"
     assert trajectories[0].times.tolist() == pytest.approx([0.0, 0.5, 1.0, 1.5, 2.0])
-    assert trajectories[0].s.tolist() == pytest.approx([2.0, 4.5, 7.0, 9.5, 12.0])
+    assert trajectories[0].s.tolist() == pytest.approx([12.0, 14.5, 17.0, 19.5, 22.0])
     assert np.all(trajectories[0].s <= vehicles[0].ref_path.length)

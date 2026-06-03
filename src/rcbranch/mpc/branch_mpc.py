@@ -203,12 +203,20 @@ def solve_branch_mpc(
             target_s=second_in,
             cfg=cfg,
         )
+        order_slack = builder.add_var(
+            f"b{branch}_xi_order_{first}_before_{second}",
+            1,
+            lb=0.0,
+            ub=ca.inf,
+            init=0.0,
+        )
         builder.add_con(
-            t_second_in - t_first_out,
+            t_second_in - t_first_out + order_slack[0],
             delta_safe_time,
             ca.inf,
             ConstraintMeta("crossing_order", i=first, j=second, branch=branch),
         )
+        builder.J += probabilities[branch] * 1000.0 * order_slack[0] ** 2
         builder.J += 1e-4 * t_first_in
 
     solver, _, _ = builder.build_solver("branch_mpc", {"ipopt.max_iter": cfg.max_ipopt_iter, "ipopt.tol": cfg.solver_tol})
