@@ -1,0 +1,1 @@
+Always use the local uv venv to run the Python scripts.

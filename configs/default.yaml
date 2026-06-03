@@ -1,0 +1,42 @@
+mpc:
+  dt: 0.2
+  horizon_steps: 25
+  max_ipopt_iter: 100
+  solver_tol: 1.0e-5
+  v_max: 13.9
+  pre_entry_epsilon: 0.25
+
+vehicle:
+  v_max: 13.9
+  a_max: 2.0
+  b_max: 6.0
+  b_comf: 3.0
+  d_buf: 3.0
+  d0_follow: 5.0
+  time_headway: 1.2
+
+objective:
+  w_v: 1.0
+  w_a: 0.2
+  w_jerk: 1.0
+  w_progress: 0.5
+  w_slack_caution: 500.0
+  w_slack_priority: 1000.0
+
+belief:
+  p_high: 0.85
+  persistence_cycles: 3
+  softmax_temp: 1.0
+  transition_persistence: 0.85
+  w_time_overlap: 1.0
+  w_accel: 0.4
+  w_near: 0.05
+  safe_time: 0.7
+
+branching:
+  tau_Psi: 1.0
+  tau_psi: 0.3
+  lambda_ema_alpha: 0.7
+  max_branch_pairs: 1
+  min_shared_controls: 1
+  delta_safe_time: 0.7

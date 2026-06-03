@@ -1,0 +1,9 @@
+scenarios: []
+
+metadata_defaults:
+  intersection_type: unknown
+  control_type: uncontrolled
+  traffic_lights_used: false
+  stop_signs_used: false
+  ego_route_known: true
+  route_uncertainty_used: false

@@ -1,0 +1,15 @@
+baselines:
+  deterministic_mpc:
+    enabled: true
+  conservative_rc_mpc:
+    enabled: true
+  fixed_time_branch_mpc:
+    enabled: true
+    branch_step: 5
+  ttc_branch_mpc:
+    enabled: true
+    ttc_gap_threshold: 1.0
+  raw_collision_dual_branch_mpc:
+    enabled: true
+  proposed_dual_priced_branching:
+    enabled: true

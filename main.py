@@ -1,5 +1,10 @@
+from rcbranch.config import load_config
+
+
 def main():
-    print("Hello from project-autodrive!")
+    config = load_config()
+    horizon = config.mpc.get("horizon_steps", "unknown")
+    print(f"rcbranch planner package ready; horizon_steps={horizon}")
 
 
 if __name__ == "__main__":
