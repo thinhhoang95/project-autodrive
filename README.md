@@ -44,3 +44,18 @@ scoring.
 
 For a detailed tutorial and codebase map, read
 [`docs/framework_walkthrough.md`](docs/framework_walkthrough.md).
+
+### Visualization Demo
+
+Launch an interactive matplotlib crossroad demo with a time seekbar, play/pause,
+and step controls:
+
+```bash
+uv run --python /opt/homebrew/bin/python3.11 rcbranch-demo-traffic
+```
+
+To save a static frame without opening a GUI:
+
+```bash
+uv run --python /opt/homebrew/bin/python3.11 rcbranch-demo-traffic --no-show --save-frame traffic_demo.png
+```

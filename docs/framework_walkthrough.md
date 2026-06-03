@@ -741,7 +741,67 @@ print(validation_available())
 
 The validation module is where collision, road-compliance, and dynamic-feasibility checks should be wired once full CommonRoad trajectories are exported.
 
-## 15. Baselines
+## 15. Visualizing Traffic Through The Intersection
+
+File: `src/rcbranch/evaluation/traffic_visualization.py`
+
+The framework includes an interactive matplotlib visualizer for path-coordinate trajectories. It draws:
+
+- reference paths,
+- conflict regions,
+- vehicle rectangles with heading,
+- short trajectory tails,
+- labels and speeds when available,
+- a time seekbar,
+- play/pause and one-step controls.
+
+Launch the built-in demo:
+
+```bash
+uv run --python /opt/homebrew/bin/python3.11 rcbranch-demo-traffic
+```
+
+Save a frame without opening the GUI:
+
+```bash
+uv run --python /opt/homebrew/bin/python3.11 rcbranch-demo-traffic --no-show --save-frame traffic_demo.png --frame-time 4.5
+```
+
+Use it from Python:
+
+```python
+import numpy as np
+
+from rcbranch.evaluation.traffic_visualization import (
+    VehicleTrajectory,
+    conflict_graph_from_trajectories,
+    visualize_traffic_scene,
+)
+from rcbranch.geometry import ReferencePath
+
+times = np.linspace(0.0, 8.0, 81)
+east_west = ReferencePath.from_xy([[-20.0, 0.0], [20.0, 0.0]])
+south_north = ReferencePath.from_xy([[0.0, -20.0], [0.0, 20.0]])
+
+trajectories = [
+    VehicleTrajectory(1, east_west, s=4.0 + 4.0 * times, times=times, label="ego"),
+    VehicleTrajectory(2, south_north, s=2.0 + 3.5 * times, times=times, label="other"),
+]
+
+conflicts = conflict_graph_from_trajectories(trajectories)
+visualize_traffic_scene(trajectories, conflicts=conflicts)
+```
+
+To visualize an MPC solution, convert it to trajectories:
+
+```python
+from rcbranch.evaluation.traffic_visualization import trajectories_from_mpc_solution
+
+trajectories = trajectories_from_mpc_solution(solution, vehicles, dt=0.2)
+visualize_traffic_scene(trajectories, conflicts=conflicts)
+```
+
+## 16. Baselines
 
 Baseline wrappers live under `src/rcbranch/planners`.
 
@@ -766,7 +826,7 @@ The design rule is that baselines should share:
 
 Only the branching or planner decision logic should differ.
 
-## 16. Scripts
+## 17. Scripts
 
 Installed entry points are declared in `pyproject.toml`:
 
@@ -795,7 +855,13 @@ Generate starter synthetic-suite metadata:
 uv run --python /opt/homebrew/bin/python3.11 python scripts/generate_intersection_suite.py
 ```
 
-## 17. Tests
+Launch the interactive traffic visualization demo:
+
+```bash
+uv run --python /opt/homebrew/bin/python3.11 rcbranch-demo-traffic
+```
+
+## 18. Tests
 
 The tests are small and component-focused.
 
@@ -828,7 +894,7 @@ Run one file:
 uv run --python /opt/homebrew/bin/python3.11 pytest tests/test_branch_trigger.py
 ```
 
-## 18. Debugging Guide
+## 19. Debugging Guide
 
 Use this map when a planner result looks wrong.
 
@@ -936,7 +1002,7 @@ Relevant module:
 src/rcbranch/mpc/branch_mpc.py
 ```
 
-## 19. Extending The Framework
+## 20. Extending The Framework
 
 ### Add A New Belief Model
 
@@ -1012,7 +1078,7 @@ run_mpc_cycle
 
 Synthetic scenarios are the best place to tune `tau_Psi` and belief parameters before running public CommonRoad scenarios.
 
-## 20. Current Limitations
+## 21. Current Limitations
 
 This is a first implementation of the research framework, not a full competition-ready CommonRoad planner.
 
@@ -1028,7 +1094,7 @@ Current limitations:
 
 These limitations are deliberate. The current goal is to make the reciprocal-caution dual-price branching idea testable and modular.
 
-## 21. Recommended Reading Order
+## 22. Recommended Reading Order
 
 For a new developer:
 
