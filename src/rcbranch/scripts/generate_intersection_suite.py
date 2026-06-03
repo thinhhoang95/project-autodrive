@@ -13,6 +13,7 @@ def main(argv: list[str] | None = None) -> int:
     suite = {
         "scenarios": [
             {"name": "two_car_crossroad", "approaches": 2, "queue_length": 0},
+            {"name": "two_car_turning_crossroad", "approaches": 2, "ego_route": "west_to_north_turn"},
             {"name": "four_approach_one_front", "approaches": 4, "queue_length": 0},
             {"name": "queue_followers", "approaches": 4, "queue_length": 2},
             {"name": "ambiguous_yield", "approaches": 2, "driver_type": "cautious"},
